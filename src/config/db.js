@@ -6,7 +6,6 @@ const prisma = new PrismaClient({
     : ['error'] 
 });
 
-
 const connectDB = async() => {
     try {
         await prisma.$connect();
@@ -22,7 +21,5 @@ const disconnectDB = async() => {
 }
 
 
-export default { connectDB, disconnectDB, prisma };
-
-
+export { connectDB, disconnectDB, prisma };
 
