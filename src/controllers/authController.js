@@ -1,5 +1,6 @@
 import { prisma } from '../config/db.js';
 import bcrypt from 'bcryptjs';
+import { generateToken } from '../config/generateToken.js';
 
 
 const register = async(req, res) => {
@@ -29,29 +30,51 @@ const register = async(req, res) => {
                 id: newUser.id,
                 name: newUser.name,
                 email: email,
-            }
+            },
+            token: generateToken(newUser.id, res)
         });
     } catch(error) {
         res.status(400).json({message: `Error registering: ${error}` })
     }
 }
-const login = async() => {
-    const userExists = prisma.user.findUnique({ where: { email: email }});
+const login = async(req, res) => {
+    try{
+        const { name, email, password } = req.body;
+
+        const userExists = await prisma.user.findUnique({ where: { email: email }});
     
-    if(!userExists) {
-        res.status(400).json({message: "User not found"});
+        if(!userExists) {
+            return res.status(400).json({message: "User not found"});
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, userExists.password);
+
+        if(!isPasswordValid) {
+            return res.status(401).json({ message: "password is not valid"});
+        }
+        return res.status(200).json({
+            status: "success",
+            user: {
+                name: userExists.name,
+                email: userExists.email
+            },
+            token: generateToken(userExists.id, res)
+        });
+    } catch(error) {
+        res.json({message: `Error: ${error}`});
     }
-
     
-
-
 };
 
+const logout = async(req, res) => {
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0)
+    }),
+    res.status(200).json({
+        status: "Success",
+        message: "Logged out successfully"
+    });
+};
 
-
-
-
-
-
-
-export { login, register };
+export { login, logout, register };

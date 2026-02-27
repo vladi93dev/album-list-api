@@ -18,6 +18,17 @@ model User {
   name String
   email String @unique
   password String
+  entries Entry[] 
 }
 
+model Entry {
+  id String @id @default(uuid())
+  title String
+  artist String
+  genres String[]
+  rating Int
+  note String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+}
 
