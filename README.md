@@ -124,6 +124,7 @@ src/
 ├── controllers/      # Route handler logic
 ├── middleware/       # Auth middleware, error handler
 ├── routes/           # Express route definitions
+├── validators/       # Zod validation schemas
 ├── prisma/           # Prisma schema and migrations
 └── app.js            # Express app entry point
 ```
