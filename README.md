@@ -9,6 +9,7 @@ A RESTful API for logging and tracking personal music listening history. Built a
 - **User authentication** — Register and log in with JWT-based auth using secure httpOnly cookies
 - **Album entry management** — Full CRUD: create, read, update, and delete listening log entries
 - **Error handling** — Centralised global error handler for consistent API responses
+- **Request validation** — Input validation using Zod schemas
 
 ---
 
@@ -22,6 +23,7 @@ A RESTful API for logging and tracking personal music listening history. Built a
 | ORM | Prisma |
 | Authentication | JWT + httpOnly cookies |
 | Password hashing | bcryptjs |
+| Validation | Zod |
 
 ---
 
@@ -74,6 +76,12 @@ npm run dev
 | POST | `/api/auth/register` | Register a new user |
 | POST | `/api/auth/login` | Log in and receive a JWT cookie |
 | POST | `/api/auth/logout` | Clear the auth cookie |
+
+### Entries
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/entries` | Create a new entry |
 
 ---
 
