@@ -14,6 +14,7 @@ const createEntry = async (req, res) => {
             userId: req.user.userId
         }});
         
+        
 
         res.status(200).json({ message: `${newEntry.artist} added` });
     } catch(error) {
