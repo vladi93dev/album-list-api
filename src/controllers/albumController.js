@@ -2,10 +2,14 @@ import { prisma } from '../config/db.js';
 import { generateToken } from '../config/generateToken.js';
 
 const getEntries = async (req, res) => {
+    const { artist, rating } = req.query;
+    console.log(req.query);
     try {
         const entries = await prisma.entry.findMany({
             where: {
-                userId: req.user.userId
+                userId: req.user.userId,
+                ...( artist && { artist: {equals: artist, mode: 'insensitive'}}),
+                ...(rating &&  { rating: parseInt(rating)})
             }
         });
         res.status(200).json({ entries })
