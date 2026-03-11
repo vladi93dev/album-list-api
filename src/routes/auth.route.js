@@ -10,9 +10,4 @@ router.post('/register', requestValidator(registerSchema), register);
 router.post('/login',requestValidator(loginSchema) , login);
 
 
-
-
-
-
-
 export default router;
