@@ -3,7 +3,7 @@ import { createEntry, getEntries, getEntryById, updateEntryById, deleteEntryById
 import { generateToken } from '../config/generateToken.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 import requestValidator from '../middlewares/requestValidator.js';
-import { createEntrySchema, updateEntrySchema } from '../validators/entrySchemas.js';
+import { createEntrySchema, updateEntrySchema, getEntryQuerySchema } from '../validators/entrySchemas.js';
 
 
 const router = express.Router();
@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-router.get('/', getEntries);
+router.get('/', requestValidator(getEntryQuerySchema, 'query'), getEntries);
 
 router.get('/genres', getEntriesGenres);
 

@@ -28,7 +28,18 @@ const updateEntrySchema = z.object({
     .max(10, "Rating must be between 1 and 10")
     .optional(),
     note: z.string().optional()
-})
+});
 
-export { createEntrySchema, updateEntrySchema };
+const getEntryQuerySchema = z.object({
+    artist: z.string().min(1).optional(),
+    rating: z.coerce.number().int()
+    .min(1, "Rating must be between 1 - 10")
+    .max(10, "Rating must be between 1 - 10")
+    .optional(),
+    genre: z.transform((val) => val.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('-')).pipe(z.enum(['Rock', 'Pop', 'Jazz', 'Hip-Hop', 'Classical', 'R&B', 'Electronic', 'Country', 'Metal', 'Folk'], {
+        error: 'Invalid genre. Accepted genres: Rock, Pop, Jazz, Hip-Hop, Classical, R&B, Electronic, Country, Metal, Folk'
+    })).optional()
+});
+
+export { createEntrySchema, updateEntrySchema, getEntryQuerySchema };
 
