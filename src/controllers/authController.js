@@ -23,15 +23,13 @@ const register = async(req, res) => {
                 password: hashedPassword
             }
         });
+        
+        generateToken(newUser.id, res)
 
         res.status(201).json({
-            status: "Created",
-            data: {
-                id: newUser.id,
-                name: newUser.name,
-                email: email,
-            },
-            token: generateToken(newUser.id, res)
+            id: newUser.id,
+            name: newUser.name,
+            email: email,
         });
     } catch(error) {
         res.status(400).json({message: `Error registering: ${error}` })
@@ -53,6 +51,7 @@ const login = async(req, res) => {
         if(!isPasswordValid) {
             return res.status(401).json({ message: "password is not valid"});
         }
+        
         return res.status(200).json({
             status: "success",
             user: {
@@ -63,9 +62,31 @@ const login = async(req, res) => {
             token: generateToken(userExists.id, res)
         });
     } catch(error) {
+        console.log(error.message);
         res.json({message: `Error: ${error}`});
     }   
 };
+
+
+const me = async(req, res) => {
+    try {
+         const user = await prisma.user.findUnique({where: {
+            id: req.user.userId
+        }});
+
+        if(!user) {
+            return res.status(400).json({message: 'Not Authorized'});
+        }
+
+        res.status(200).json({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+        });
+    } catch(error) {
+        res.status(400).json({error});
+    }
+}
 
 const logout = async(req, res) => {
     res.cookie('jwt', '', {
@@ -79,4 +100,4 @@ const logout = async(req, res) => {
 };
 
 
-export { login, logout, register };
+export { login, logout, register, me };

@@ -26,6 +26,15 @@ app.use('/api/users', usersRoutes);
 app.use('/api/entries', albumsRoutes);
 app.use('/api/auth', authRoutes);
 
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Music Journal API',
+    endpoints: {
+      auth: '/api/auth',
+      entries: '/api/entries',
+    }
+  })
+})
 
 const server = app.listen(process.env.PORT || 3001, "0.0.0.0", () => {
     console.log(`Listening on PORT: ${process.env.PORT}`);

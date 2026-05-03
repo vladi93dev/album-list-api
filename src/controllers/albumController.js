@@ -13,6 +13,7 @@ const getEntries = async (req, res) => {
                 ...( genre && { genre: { equals: genre, mode: 'insensitive' }})
             }
         });
+        console.log(entries);
         res.status(200).json({ entries })
     } catch(error) {
         res.status(401).json({ message: error })
